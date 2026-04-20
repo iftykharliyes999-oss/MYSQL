@@ -23,7 +23,7 @@ if(isset($_POST['submit'])){
 <html>
 <head>
     <title>Batch70 User Form</title>
-    <style>
+    <!-- <style>
         body {
             font-family: Arial;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -105,7 +105,7 @@ if(isset($_POST['submit'])){
             from {opacity:0; transform: translateX(100px);}
             to {opacity:1; transform: translateX(0);}
         }
-    </style>
+    </style> -->
 </head>
 <body>
 
@@ -128,5 +128,26 @@ if(isset($_POST['submit'])){
 <div class="popup error">Something went wrong</div>
 <?php } ?>
 
+<hr>
+
+<table>
+<?php 
+
+
+$rafu = $conn->query("select * from rafin");
+while(list($name,$email,$address)=$rafu->fetch_row()){
+    echo "<tr>
+    <td>$name</td>
+    <td>$email</td>
+    <td>$address</td>
+   
+    
+    </tr>";
+}
+
+
+
+?>
+</table>
 </body>
 </html>
