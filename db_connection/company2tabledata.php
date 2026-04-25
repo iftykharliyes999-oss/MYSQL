@@ -1,6 +1,12 @@
-<?php 
-$con = mysqli_connect("localhost", "root", "", "company");
+<?php
+$conn = new mysqli("localhost", "root", "", "company");
 
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Manufacturer list load
+$result = $conn->query("SELECT * FROM Manufacturer");
 ?>
 
 <h2>Add Manufacturer</h2>
@@ -10,12 +16,10 @@ $con = mysqli_connect("localhost", "root", "", "company");
     Address: <input type="text" name="address" required><br><br>
     Contact: <input type="text" name="contact" required><br><br>
 
-    <input type="submit" name="submit" value="Save">
+    <input type="submit" value="Save Manufacturer">
 </form>
-<?php
-$conn = new mysqli("localhost", "root", "", "test");
-$result = $conn->query("SELECT * FROM Manufacturer");
-?>
+
+<hr>
 
 <h2>Add Product</h2>
 
@@ -34,61 +38,41 @@ $result = $conn->query("SELECT * FROM Manufacturer");
         <?php } ?>
     </select><br><br>
 
-    <input type="submit" name="submit" value="Save Product">
+    <input type="submit" value="Save Product">
 </form>
-6. Product Insert (PHP)
-$conn = new mysqli("localhost", "root", "", "test");
 
-if(isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $price = $_POST['price'];
-    $manufacturer_id = $_POST['manufacturer_id'];
 
-    $conn->query("CALL insert_product('$name','$price','$manufacturer_id')");
+<?php
+$conn = new mysqli("localhost", "root", "", "company");
 
-    echo "Product Added!";
-}
-4. Manufacturer Insert (PHP)
-$conn = new mysqli("localhost", "root", "", "test");
-
-if(isset($_POST['submit'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $address = $_POST['address'];
     $contact = $_POST['contact'];
 
-    $conn->query("CALL insert_manufacturer('$name','$address','$contact')");
-    
+    $stmt = $conn->prepare("CALL insert_manufacturer(?, ?, ?)");
+    $stmt->bind_param("sss", $name, $address, $contact);
+    $stmt->execute();
+
     echo "Manufacturer Added!";
 }
+?>
 
 
-Stored Procedure (Product)
-DELIMITER //
+<?php
+$conn = new mysqli("localhost", "root", "", "company");
 
-CREATE PROCEDURE insert_product(
-    IN p_name VARCHAR(50),
-    IN p_price INT,
-    IN p_manufacturer_id INT
-)
-BEGIN
-    INSERT INTO Product(name, price, manufacturer_id)
-    VALUES (p_name, p_price, p_manufacturer_id);
-END //
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $price = $_POST['price'];
+    $manufacturer_id = $_POST['manufacturer_id'];
 
-DELIMITER ;
+    $stmt = $conn->prepare("CALL insert_product(?, ?, ?)");
+    $stmt->bind_param("sii", $name, $price, $manufacturer_id);
+    $stmt->execute();
+
+    echo "Product Added!";
+}
+?>
 
 
-Stored Procedure (Manufacturer)
-DELIMITER //
-
-CREATE PROCEDURE insert_manufacturer(
-    IN m_name VARCHAR(50),
-    IN m_address VARCHAR(100),
-    IN m_contact VARCHAR(50)
-)
-BEGIN
-    INSERT INTO Manufacturer(name, address, contact_no)
-    VALUES (m_name, m_address, m_contact);
-END //
-
-DELIMITER ;
