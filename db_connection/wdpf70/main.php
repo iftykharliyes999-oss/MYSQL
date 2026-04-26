@@ -34,12 +34,9 @@ if(isset($_POST['add_product'])){
 }
 
 /* DELETE MANUFACTURER */
-if(isset($_GET['delete'])){
-    $id = $_GET['delete'];
-
-    $stmt = $conn->prepare("DELETE FROM manufacturers WHERE id=?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+if (isset($_POST['delete'])) {
+	$dmid = $_POST['manufacturer_id'];
+	$conn->query(" delete from manufacturers where id='$dmid' ");
 }
 ?>
 
@@ -82,15 +79,14 @@ if(isset($_GET['delete'])){
 <h2>Delete Manufacturer</h2>
 
 <form method="post" action="">
-    <select name="id">
-        <?php
-        $res = $conn->query("SELECT * FROM manufacturers");
-
-        while($row = $res->fetch_assoc()){
-            echo "<option value='".$row['id']."'>".$row['name']."</option>";
-        }
-        ?>
-    </select>
+    <select name="manufacturer_id">
+    <?php
+    $res = $conn->query("SELECT * FROM manufacturers");
+    while($row = $res->fetch_assoc()){
+        echo "<option value='".$row['id']."'>".$row['name']."</option>";
+    }
+    ?>
+</select>
 
     <button type="submit" name="delete">Delete</button>
 </form>
