@@ -16,12 +16,12 @@ $data = $result->fetch_assoc();
 if(isset($_POST['update'])){
 
     $name = $_POST['name'];
-    $contact = $_POST['contact'];
+    $Contact = $_POST['Contact'];
     $email = $_POST['email'];
 
     $db->query("UPDATE users SET 
         name='$name',
-        contact='$contact',
+        Contact='$Contact',
         email='$email'
         WHERE id=$id
     ");
@@ -44,22 +44,18 @@ if(isset($_POST['update'])){
 
 <form method="post">
 
-<!-- NAME -->
 <label>Name</label>
 <input type="text" name="name" class="form-control mb-2"
 value="<?= $data['name'] ?? '' ?>">
 
-<!-- CONTACT (SAFE FIX) -->
 <label>Contact</label>
-<input type="text" name="contact" class="form-control mb-2"
-value="<?= $data['contact'] ?? '' ?>">
+<input type="text" name="Contact" class="form-control mb-2"
+value="<?= $data['Contact'] ?? '' ?>">
 
-<!-- EMAIL -->
 <label>Email</label>
 <input type="text" name="email" class="form-control mb-2"
 value="<?= $data['email'] ?? '' ?>">
 
-<!-- SUBMIT -->
 <input type="submit" name="update" value="Save Changes" class="btn btn-primary">
 
 </form>
