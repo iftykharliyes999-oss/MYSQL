@@ -1,0 +1,5 @@
+# Aurora Grand · Apache config
+Options -Indexes
+<FilesMatch "\.(sql|md|log)$">
+  Require all denied
+</FilesMatch>
